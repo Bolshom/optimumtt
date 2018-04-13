@@ -1,0 +1,16 @@
+Package: optimumtt
+Type: Package
+Title: A colection of functions to calculate the speed that a cyclist
+    will develop, on a given location and climate.
+Version: 0.1.0
+Author: Natan Freitas Leite
+Maintainer: Natan Freitas Leite <natanfl@hotmail.com>
+Description: A colection of functions to calculate the speed that a cyclist
+    will develop, on a given location and climate.
+    The main purpose is to give foundation to optimize a timetrial event.
+License: GNU v3.0
+Imports:
+    darksky,
+    weathermetrics
+Encoding: UTF-8
+LazyData: true

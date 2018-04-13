@@ -1,0 +1,11 @@
+ang_head=function(Ta,La,Tb,Lb){
+  Ta=rad(Ta)
+  Tb=rad(Tb)
+  La=rad(La)
+  Lb=rad(Lb)
+  dL=abs(Lb-La)
+  x=cos(Tb)*sin(dL)
+  y=cos(Ta)*sin(Tb)-sin(Ta)*cos(Tb)*cos(dL)
+  b=atan2(x,y)
+  b=deg(b)
+  return(b)}
