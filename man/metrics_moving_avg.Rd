@@ -8,7 +8,7 @@ Gives a PMax, Wbal and mFTP estimations from a given period of training.
 From a mean maximum power file, containing the best power marks during a certain period for every training sessions, this function is able to calculate the Pmax, WBal and mFTP estimations for a season.
 }
 \usage{
-metrics_moving_avg(updt, mmp_alldata, dates_list, period = 90, wpk = F, weight = NULL, pmax_all = NULL, wbal_all = NULL, mftp_all = NULL)
+metrics_moving_avg(updt, mmp_alldata, dates_list, period = 90, wpk = F, weight, pmax_all = NULL, wbal_all = NULL, mftp_all = NULL)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -70,7 +70,7 @@ Natan Freitas Leite.
 }
 \examples{
 ## The function is currently defined as
-function (updt, mmp_alldata, dates_list, period = 90, wpk = F, weight = NULL,
+function (updt, mmp_alldata, dates_list, period = 90, wpk = F, weight,
     pmax_all = NULL, wbal_all = NULL, mftp_all = NULL)
 {
     require(zoo)
