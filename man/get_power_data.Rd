@@ -47,7 +47,7 @@ function ()
     rownames(metrics) = 1:dim(metrics)[1]
     dates_list_updt = metrics$time
     power_list_updt = list()
-    for (i in 1:length(list_updt)) {
+    for (i in 1:length(dates_list_updt)) {
         power_list_updt[[i]] = GC.activity(activity = dates_list_updt[i])[[1]]$power
     }
     return(list(dates_list_updt, power_list_updt))
