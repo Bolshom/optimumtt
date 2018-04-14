@@ -17,6 +17,7 @@ if (updt){mmp_alldata_updt=mmp_alldata} else{
       mmp_alldata_updt[[i]]=mmp_alldata[[which(dates_list==dates_list_updt[i])]]} else {
         mmp_alldata_updt[[i]]=mmp_updt[[i]]}
   }
+  print(i)
 }
 return(mmp_alldata_updt)
 }
