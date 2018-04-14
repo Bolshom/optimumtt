@@ -79,6 +79,7 @@ function (dates_list_updt, dates_list, power_list_updt, mmp_alldata)
                 mmp_alldata_updt[[i]] = mmp_updt[[i]]
             }
         }
+      print(i)
     }
     return(mmp_alldata_updt)
   }
