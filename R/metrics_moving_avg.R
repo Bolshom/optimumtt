@@ -2,7 +2,7 @@ metrics_moving_avg=function(updt,mmp_alldata,dates_list,period=90,wpk=F,weight,p
   require(zoo)
   require(changepoint)
   require(lubridate)
-
+  options(warn=-1)
   #data framing the list
   #which training session is the longest?
   len=c()
@@ -25,9 +25,11 @@ metrics_moving_avg=function(updt,mmp_alldata,dates_list,period=90,wpk=F,weight,p
   }
 
   #getting only dates from dates_list
-  dates_list_2=date(dates_list)
+  dates_list_2=lubridate::date(dates_list)
+  dates=dates_list_2[1]:tail(dates_list_2,1)
   #creating vector with all data from begging of period to the end
-  dates=as.Date(dates_list_2[1]:tail(dates_list_2,1))
+  dates=as.Date(dates, origin = "1970-01-01")
+
 
   #calculating rolling metrics with a given period
   if (!updt){
@@ -62,5 +64,6 @@ metrics_moving_avg=function(updt,mmp_alldata,dates_list,period=90,wpk=F,weight,p
         print(i)
       }
     }
+  options(warn=0)
   return(list(pmax_all,mftp_all,wbal_all))
 }

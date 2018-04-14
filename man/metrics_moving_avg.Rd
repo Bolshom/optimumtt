@@ -8,7 +8,7 @@ Gives a PMax, Wbal and mFTP estimations from a given period of training.
 From a mean maximum power file, containing the best power marks during a certain period for every training sessions, this function is able to calculate the Pmax, WBal and mFTP estimations for a season.
 }
 \usage{
-metrics_moving_avg(updt, mmp_alldata, dates_list, period = 90, wpk = F, weight, pmax_all = NULL, wbal_all = NULL, mftp_all = NULL)
+metrics_moving_avg(updt, mmp_alldata, dates_list, period = 90, wpk = F, weight, pmax_all = NULL, wbal_all = NULL, mftp_all = NULL, ...)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -70,12 +70,13 @@ Natan Freitas Leite.
 }
 \examples{
 ## The function is currently defined as
-function (updt, mmp_alldata, dates_list, period = 90, wpk = F, weight,
-    pmax_all = NULL, wbal_all = NULL, mftp_all = NULL)
+function (updt, mmp_alldata, dates_list, period = 90, wpk = F,
+    weight, pmax_all = NULL, wbal_all = NULL, mftp_all = NULL)
 {
     require(zoo)
     require(changepoint)
     require(lubridate)
+    options(warn = -1)
     len = c()
     l_ma = length(mmp_alldata)
     for (i in 1:l_ma) {
@@ -94,18 +95,19 @@ function (updt, mmp_alldata, dates_list, period = 90, wpk = F, weight,
     if (!wpk) {
         mmp_all_df = mmp_all_df/weight
     }
-    dates_list = date(dates_list)
-    dates = as.Date(dates_list[1]:tail(dates_list, 1))
+    dates_list_2 = lubridate::date(dates_list)
+    dates = dates_list_2[1]:tail(dates_list_2, 1)
+    dates = as.Date(dates, origin = "1970-01-01")
     if (!updt) {
         pmax_all = c()
         mftp_all = c()
         wbal_all = c()
-        condition = as.numeric(tail(dates_list, 1) - dates_list[1]) -
+        condition = as.numeric(tail(dates_list_2, 1) - dates_list_2[1]) -
             period + 1
         for (i in 1:condition) {
-            if (length(which(dates_list \%in\% (dates[i] - period):dates[i])) ==
+            if (length(which(dates_list_2 \%in\% (dates[i] - period):dates[i])) ==
                 1) {
-                max_mmp = mmp_all_df[, which(dates_list \%in\%
+                max_mmp = mmp_all_df[, which(dates_list_2 \%in\%
                   (dates[i] - period):dates[i])]
                 metrics = metrics_model(max_mmp, T, weight)
                 pmax_all[i] = metrics[1]
@@ -114,7 +116,7 @@ function (updt, mmp_alldata, dates_list, period = 90, wpk = F, weight,
                 print(i)
             }
             else {
-                max_mmp = apply(mmp_all_df[, which(dates_list \%in\%
+                max_mmp = apply(mmp_all_df[, which(dates_list_2 \%in\%
                   dates[i]:(dates[i] + period))], 1, max)
                 metrics = metrics_model(max_mmp, T, weight)
                 pmax_all[i] = metrics[1]
@@ -126,10 +128,10 @@ function (updt, mmp_alldata, dates_list, period = 90, wpk = F, weight,
     }
     else {
         condition1 = length(pmax_all) + 1
-        condition2 = as.numeric(tail(dates_list, 1) - dates_list[1]) -
+        condition2 = as.numeric(tail(dates_list_2, 1) - dates_list_2[1]) -
             period + 1
         for (i in condition1:condition2) {
-            max_mmp = apply(mmp_all_df[, which(dates_list \%in\%
+            max_mmp = apply(mmp_all_df[, which(dates_list_2 \%in\%
                 dates[i]:(dates[i] + period))], 1, max)
             metrics = metrics_model(max_mmp, T, weight)
             pmax_all[i] = metrics[1]
@@ -138,13 +140,14 @@ function (updt, mmp_alldata, dates_list, period = 90, wpk = F, weight,
             print(i)
         }
     }
+    options(warn = 0)
     return(list(pmax_all, mftp_all, wbal_all))
   }
 
-  data(mmp_alldata)
+  data(mmp_alldata_dataset)
   data(dates_list_updt)
 
-  metrics=metrics_moving_avg(F,mmp_alldata,dates_list_updt,weight=65)
+  metrics=metrics_moving_avg(F,mmp_alldata_dataset,dates_list_updt,weight=65)
 
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
