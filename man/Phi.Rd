@@ -29,7 +29,8 @@ Date and time to get the weather report. Check example for input format.
 }
 }
 \details{
-%%  ~~ If necessary, more details than the description above ~~
+To use the package "darksky" to collect weather report, you must activate the API with your key.
+Check https://darksky.net/dev for more info.
 }
 \value{
 \item{phi}{The angle at which the wind affects the cyclist, in degrees.}

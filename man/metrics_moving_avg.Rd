@@ -8,7 +8,7 @@ Gives a PMax, Wbal and mFTP estimations from a given period of training.
 From a mean maximum power file, containing the best power marks during a certain period for every training sessions, this function is able to calculate the Pmax, WBal and mFTP estimations for a season.
 }
 \usage{
-metrics_moving_avg(updt, mmp_alldata, period = 90, wpk = F, weight = NULL, dates_list, pmax_all = NULL, wbal_all = NULL, mftp_all = NULL, plot = T)
+metrics_moving_avg(updt, mmp_alldata, dates_list, period = 90, wpk = F, weight = NULL, pmax_all = NULL, wbal_all = NULL, mftp_all = NULL)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -38,9 +38,6 @@ If updt=T, then this is the older vector of WBal estimations.
 }
   \item{mftp_all}{
 If updt=T, then this is the older vector of mFTP estimations.
-}
-  \item{plot}{
-A boolean indicating wheter you want to plot a graphic from all three metrics (plot=T), or not (plot=F).
 }
 }
 \details{
@@ -73,9 +70,8 @@ Natan Freitas Leite.
 }
 \examples{
 ## The function is currently defined as
-function (updt, mmp_alldata, period = 90, wpk = F, weight = NULL,
-    dates_list, pmax_all = NULL, wbal_all = NULL, mftp_all = NULL,
-    plot = T)
+function (updt, mmp_alldata, dates_list, period = 90, wpk = F, weight = NULL,
+    pmax_all = NULL, wbal_all = NULL, mftp_all = NULL)
 {
     require(zoo)
     require(changepoint)
@@ -98,9 +94,9 @@ function (updt, mmp_alldata, period = 90, wpk = F, weight = NULL,
     if (!wpk) {
         mmp_all_df = mmp_all_df/weight
     }
+    dates_list = date(dates_list)
+    dates = as.Date(dates_list[1]:tail(dates_list, 1))
     if (!updt) {
-        dates_list = date(dates_list)
-        dates = as.Date(dates_list[1]:tail(dates_list, 1))
         pmax_all = c()
         mftp_all = c()
         wbal_all = c()
@@ -129,8 +125,6 @@ function (updt, mmp_alldata, period = 90, wpk = F, weight = NULL,
         }
     }
     else {
-        dates_list = date(dates_list)
-        dates = as.Date(dates_list[1]:tail(dates_list, 1))
         condition1 = length(pmax_all) + 1
         condition2 = as.numeric(tail(dates_list, 1) - dates_list[1]) -
             period + 1
@@ -145,44 +139,12 @@ function (updt, mmp_alldata, period = 90, wpk = F, weight = NULL,
         }
     }
     return(list(pmax_all, mftp_all, wbal_all))
-    if (plot) {
-        plot(seq(dates_list[1] + period, tail(dates_list, 1),
-            length.out = length(pmax_all)), pmax_all, type = "l",
-            lwd = 2, col = "purple", xaxt = "n", main = paste("PMax: Rolling",
-                period, "days"), xlab = "Date", ylab = "Watts")
-        axis(side = 1, at = seq(dates_list[1] + period, tail(dates_list,
-            1), length.out = 8), labels = format(seq(dates_list[1] +
-            period, tail(dates_list, 1), length.out = 8), "\%b-\%y"))
-        abline(v = seq(dates_list[1] + period, tail(dates_list,
-            1), length.out = 8), col = "grey", lwd = 0.5, lty = "dotted")
-        grid(NA, NULL)
-        plot(seq(dates_list[1] + period, tail(dates_list, 1),
-            length.out = length(mftp_all)), mftp_all, type = "l",
-            lwd = 2, col = "red", xaxt = "n", main = paste("Modeled FTP: Rolling",
-                period, "days"), xlab = "Date", ylab = "Watts")
-        axis(side = 1, at = seq(dates_list[1] + period, tail(dates_list,
-            1), length.out = 8), labels = format(seq(dates_list[1] +
-            period, tail(dates_list, 1), length.out = 8), "\%b-\%y"))
-        abline(v = seq(dates_list[1] + period, tail(dates_list,
-            1), length.out = 8), col = "grey", lwd = 0.5, lty = "dotted")
-        grid(NA, NULL)
-        plot(seq(dates_list[1] + period, tail(dates_list, 1),
-            length.out = length(wbal_all)), wbal_all, type = "l",
-            lwd = 2, col = "orange", xaxt = "n", main = paste("W': Rolling",
-                period, "days"), xlab = "Date", ylab = "Joules")
-        axis(side = 1, at = seq(dates_list[1] + period, tail(dates_list,
-            1), length.out = 8), labels = format(seq(dates_list[1] +
-            period, tail(dates_list, 1), length.out = 8), "\%b-\%y"))
-        abline(v = seq(dates_list[1] + period, tail(dates_list,
-            1), length.out = 8), col = "grey", lwd = 0.5, lty = "dotted")
-        grid(NA, NULL)
-    }
   }
 
   data(mmp_alldata)
   data(dates_list_updt)
 
-  metrics=metrics_moving_avg(updt=F,mmp_alldata=mmp_alldata,period=90,wpk=F,weight=65,dates_list=dates_list,plot=T)
+  metrics=metrics_moving_avg(F,mmp_alldata,dates_list_updt,weight=65)
 
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
